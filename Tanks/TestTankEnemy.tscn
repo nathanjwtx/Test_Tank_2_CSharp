@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://tanks/TestTankBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://tanks/TestTankEnemy.cs" type="Script" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+
+custom_solver_bias = 0.0
+radius = 10.0
+
+[node name="TestTankEnemy" instance=ExtResource( 1 )]
+
+collision_layer = 4
+collision_mask = 3
+script = ExtResource( 2 )
+Speed = 150
+DetectRadius = 0
+
+[node name="Body" parent="." index="0"]
+
+_sections_unfolded = [ "Offset", "Region", "Transform" ]
+
+[node name="DetectRadius" type="Area2D" parent="." index="4"]
+
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+_sections_unfolded = [ "Pickable", "Transform" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectRadius" index="0"]
+
+shape = SubResource( 1 )
+_sections_unfolded = [ "Material", "Transform", "Visibility", "Z Index" ]
+
+[connection signal="body_entered" from="DetectRadius" to="." method="_on_DetectRadius_body_entered"]
+
+[connection signal="body_exited" from="DetectRadius" to="." method="_on_DetectRadius_body_exited"]
+
+
