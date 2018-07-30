@@ -56,6 +56,8 @@
     <Compile Include="tanks\TestTankEnemy.cs" />
     <Compile Include="Tanks\TestTankPlayer2.cs" />
     <Compile Include="terrain\Tree.cs" />
+    <Compile Include="TestMap\Bullet.cs" />
+    <Compile Include="TestMap\TestMap.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

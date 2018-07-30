@@ -1,19 +1,20 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Map02/TestMap2.cs" type="Script" id=1]
 [ext_resource path="res://terrain/terrain_tiles.tres" type="TileSet" id=2]
 [ext_resource path="res://Tanks/TestTankPlayer2.tscn" type="PackedScene" id=3]
 [ext_resource path="res://terrain/Tree.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Tanks/TestTankEnemy.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Bullets/TweenTestBullet.tscn" type="PackedScene" id=6]
 
-[sub_resource type="Curve2D" id=2]
+[sub_resource type="Curve2D" id=1]
 
 bake_interval = 5.0
 _data = {
-"points": PoolVector2Array(  )
+"points": PoolVector2Array( 0, 0, 0, 0, 630, 50, 0, 0, 0, 0, 810, 50, 0, 0, 0, 0, 860, 160, 0, 0, 0, 0, 680, 150 )
 }
 
-[node name="Node2D" type="Node2D" index="0"]
+[node name="Node2D" type="Node2D"]
 
 script = ExtResource( 1 )
 
@@ -54,19 +55,28 @@ playback/active = false
 playback/repeat = false
 playback/speed = 1.0
 
-[node name="Path2D" type="Path2D" parent="." index="3"]
-
-self_modulate = Color( 0.5, 0.6, 1, 0.7 )
-curve = SubResource( 2 )
-
-[node name="Tree" parent="." index="4" instance=ExtResource( 4 )]
+[node name="Tree" parent="." index="3" instance=ExtResource( 4 )]
 
 position = Vector2( 453.709, 245.696 )
 
-[node name="Shooter" parent="." index="5" instance=ExtResource( 5 )]
+[node name="Shooter" parent="." index="4" instance=ExtResource( 5 )]
 
 position = Vector2( 750.655, 509.481 )
 collision_mask = 5
+Bullet = ExtResource( 6 )
+Speed = 10
 DetectRadius = 200
+
+[node name="Path2D" type="Path2D" parent="." index="5"]
+
+self_modulate = Color( 0.5, 0.6, 1, 0.7 )
+curve = null
+
+[node name="Path2D2" type="Path2D" parent="." index="6"]
+
+self_modulate = Color( 0.5, 0.6, 1, 0.7 )
+curve = SubResource( 1 )
+
+[connection signal="Shoot" from="Shooter" to="." method="_on_Shooter_Shoot"]
 
 

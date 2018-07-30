@@ -42,7 +42,7 @@ public class TestTankEnemy : TestTankBase
             {
                 GD.Print("fire");
                 ShootGun(CreatePath(_target.GlobalPosition, GlobalPosition));
-                GunTimer.Start();
+//                GunTimer.Start();
                 _canShoot = false;
             }
         }
@@ -67,7 +67,7 @@ public class TestTankEnemy : TestTankBase
                     + (Math.Pow((0.1 * i), 2) * enemyPos[1]);
             point.x = Convert.ToSingle(x);
             point.y = Convert.ToSingle(y);
-//            GD.Print(point);
+            GD.Print(point);
             _curve.AddPoint(point, new Vector2(0, 0));
         }
         GD.Print(_curve.GetPointCount());
@@ -77,21 +77,20 @@ public class TestTankEnemy : TestTankBase
     #region Signals
     private void _on_Timer_timeout()
     {
-        GunTimer.Start();
+//        GunTimer.Start();
         _canShoot = true;
     }
     
     private void _on_DetectRadius_body_entered(Godot.Object body)
     {
-//        var b = (KinematicBody2D) body;
-//        GD.Print(b.Name);
         if (body is KinematicBody2D player)
         {
             if (player.Name == "Target")
             {
                 GD.Print("you hit tank");
+                CreatePath(player.GlobalPosition, GlobalPosition);
 //                GunTimer.Start();
-//                _target = player;
+                _target = player;
             }
         }
     }

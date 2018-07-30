@@ -1,0 +1,63 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://TestMap/TestMap.cs" type="Script" id=1]
+[ext_resource path="res://TestMap/Bullet.tscn" type="PackedScene" id=2]
+[ext_resource path="res://terrain/terrain_tiles.tres" type="TileSet" id=3]
+[ext_resource path="res://assets/Spritesheet/onlyObjects_retina.png" type="Texture" id=4]
+
+[sub_resource type="Curve2D" id=1]
+
+bake_interval = 5.0
+_data = {
+"points": PoolVector2Array(  )
+}
+
+[node name="TestMap" type="Node2D" index="0"]
+
+script = ExtResource( 1 )
+Bullet = ExtResource( 2 )
+
+[node name="TileMap" type="TileMap" parent="." index="0"]
+
+mode = 0
+tile_set = ExtResource( 3 )
+cell_size = Vector2( 64, 64 )
+cell_quadrant_size = 16
+cell_custom_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+cell_half_offset = 2
+cell_tile_origin = 0
+cell_y_sort = false
+cell_clip_uv = false
+collision_use_kinematic = false
+collision_friction = 1.0
+collision_bounce = 0.0
+collision_layer = 1
+collision_mask = 1
+occluder_light_mask = 1
+format = 1
+tile_data = PoolIntArray( 0, 0, 0, 2, 0, 0, 4, 0, 0, 6, 0, 0, 8, 0, 0, 10, 0, 0, 12, 0, 0, 14, 0, 0, 131072, 0, 0, 131074, 0, 0, 131076, 0, 0, 131078, 0, 0, 131080, 0, 0, 131082, 0, 0, 131084, 0, 0, 131086, 0, 0, 262144, 0, 0, 262146, 0, 0, 262148, 0, 0, 262150, 0, 0, 262152, 0, 0, 262154, 0, 0, 262156, 0, 0, 262158, 0, 0, 393216, 0, 0, 393218, 0, 0, 393220, 0, 0, 393222, 0, 0, 393224, 0, 0, 393226, 0, 0, 393228, 0, 0, 393230, 0, 0, 524288, 0, 0, 524290, 0, 0, 524292, 0, 0, 524294, 0, 0, 524296, 0, 0, 524298, 0, 0, 524300, 0, 0, 524302, 0, 0 )
+
+[node name="Bill" type="Sprite" parent="." index="1"]
+
+position = Vector2( 250, 310 )
+rotation = -1.5708
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 348, 217, 84, 89 )
+_sections_unfolded = [ "Region", "Transform" ]
+
+[node name="Ben" type="Sprite" parent="." index="2"]
+
+position = Vector2( 720, 310 )
+rotation = 1.5708
+texture = ExtResource( 4 )
+region_enabled = true
+region_rect = Rect2( 431, 212, 85, 93 )
+_sections_unfolded = [ "Animation", "Offset", "Region", "Transform" ]
+
+[node name="Path2D" type="Path2D" parent="." index="3"]
+
+self_modulate = Color( 0.5, 0.6, 1, 0.7 )
+curve = SubResource( 1 )
+
+
