@@ -32,11 +32,11 @@ public class TestTankBase : KinematicBody2D
     }
 
 //    public void ShootGun(Position2D muzzle)
-    public void ShootGun()
+    public void ShootGun(Curve2D curve)
     {    
-//        GD.Print("Fired");
+        GD.Print("Fired");
 //        var dir = new Vector2(1, 0).Rotated(muzzle.GlobalRotation);
 //        EmitSignal("Shoot", Bullet, muzzle.GlobalPosition, dir);
-        EmitSignal("Shoot");
+        EmitSignal("Shoot", curve);
     }
 }

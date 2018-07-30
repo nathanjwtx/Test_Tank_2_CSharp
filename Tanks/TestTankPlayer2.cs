@@ -1,29 +1,28 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
 using Godot;
 
 public class TestTankPlayer2 : TestTankBase
 {
     private Node _parent;
-    private Curve2D _curve;
-    private Path2D _path;
     private Node2D _shooter;
     private Node2D _target;
+    private Node2D _muzzle;
+    
+    public bool Fired = false;
     
     public override void _Ready()
     {
         base._Ready();
         _parent = GetParent();
-        _shooter = (Node2D) _parent.GetNode("Shooter");
-        _target = (Node2D) _parent.GetNode("TargetTank");
-        _path = (Path2D) _parent.GetNode("Path2D");
-        _path.Curve = CreatePath(_shooter.GlobalPosition, _target.GlobalPosition);
+        _muzzle = GetNode<Position2D>("Turret/Muzzle");
     }
 
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
         Control(delta);
-//        MoveAndSlide(Velocity);
+        MoveAndSlide(Velocity);
     }
 
     public new void Control(float delta)
@@ -60,33 +59,11 @@ public class TestTankPlayer2 : TestTankBase
 
         if (Input.IsActionJustPressed("shoot"))
         {
+//            _path.Curve = CreatePath(_muzzle.GlobalPosition, _target.GlobalPosition);
             GD.Print("click");
-            ShootGun();
+            Fired = true;
+//            ShootGun(CreatePath(_muzzle.GlobalPosition, _target.GlobalPosition));
         }
     }
-    
-    private Curve2D CreatePath(Vector2 shooterPos, Vector2 enemyPos)
-    {
-        GD.Print(shooterPos);
-        _curve = new Curve2D();
-        Vector2 point = new Vector2();
-        for (int i = 0; i < 11; i++)
-        {
-            var x = (Math.Pow((1 - (0.1 * i)), 2) * shooterPos[0]) 
-                    + ((2 * (1 - (0.1 * i)) * i/10) * (Math.Abs(shooterPos[0] - enemyPos[0]) / 2))
-                    + (Math.Pow((0.1 * i), 2) * enemyPos[0]);
-            var y = (Math.Pow((1 - (0.1 * i)), 2) * shooterPos[1]) 
-                    + ((2 * (1 - (0.1 * i)) * i/10) * 1)
-                    + (Math.Pow((0.1 * i), 2) * enemyPos[1]);
-            point.x = Convert.ToSingle(x);
-            point.y = Convert.ToSingle(y);
-            GD.Print(point);
-            _curve.AddPoint(point, new Vector2(0, 0));
-        }
-        GD.Print(_curve.GetPointCount());
-        return _curve;
-
-    }
-
 }
 

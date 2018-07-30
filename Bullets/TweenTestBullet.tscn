@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Map02/TestBullet2.cs" type="Script" id=1]
+[ext_resource path="res://Bullets/TestBullet2.cs" type="Script" id=1]
 [ext_resource path="res://assets/Spritesheet/onlyObjects_retina_rotated.png" type="Texture" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]

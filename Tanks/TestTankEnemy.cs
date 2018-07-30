@@ -4,23 +4,26 @@ using Godot;
 public class TestTankEnemy : TestTankBase
 {
 
-    public Node Parent;
-    public PathFollow2D Path;
-    public KinematicBody2D Target;
-    public Sprite EnemyTurret;
     [Export] public int DetectRadius;
-    public bool CanShoot = true;
+
+    private Node _parent;
+    private PathFollow2D _follow;
+    private KinematicBody2D _target;
+    private Sprite _enemyTurret;
+    private bool _canShoot = false;
+    private Curve2D _curve;
+    private Path2D _path;
 
     public override void _Ready()
     {
-        Parent = GetParent();
+        _parent = GetParent();
         GunTimer = (Timer) GetNode("Timer");
         GunTimer.Start();
         var circle = new CircleShape2D();
         circle.Radius = DetectRadius;
         var radius = (CollisionShape2D) GetNode("DetectRadius/CollisionShape2D");
         radius.Shape = circle;
-        EnemyTurret = (Sprite) GetNode("Turret");
+        _enemyTurret = (Sprite) GetNode("Turret");
     }
 
     public override void _PhysicsProcess(float delta)
@@ -33,58 +36,73 @@ public class TestTankEnemy : TestTankBase
     public override void _Process(float delta)
     {
         base._Process(delta);
-        if (Target != null)
+        if (_target != null)
         {
-            Vector2 targetDir = (Target.GlobalPosition - GlobalPosition).Normalized();
-            Vector2 currentDir = new Vector2(1, 0).Rotated(EnemyTurret.GlobalRotation);
-            EnemyTurret.GlobalRotation = currentDir.LinearInterpolate(targetDir, 75 * delta).Angle();
-            if (targetDir.Dot(currentDir) > 0.9)
+            if (_canShoot)
             {
-                if (CanShoot)
-                {
-                    GD.Print("fire");
-                    Position2D muzzle = (Position2D) GetNode("Turret/Muzzle");
-//                    ShootGun(muzzle);
-                    GunTimer.Start();
-                    CanShoot = false;
-                }
+                GD.Print("fire");
+                ShootGun(CreatePath(_target.GlobalPosition, GlobalPosition));
+                GunTimer.Start();
+                _canShoot = false;
             }
         }
     }
 
     public new void Control(float delta)
     {
-        if (Parent.Name == "PathFollow2D")
-        {
-            Path = (PathFollow2D) GetParent();
-            Path.SetOffset(Path.GetOffset() + Speed * delta);
-            Position = new Vector2();
-        }
+        
     }
 
+    private Curve2D CreatePath(Vector2 shooterPos, Vector2 enemyPos)
+    {
+        _curve = new Curve2D();
+        Vector2 point = new Vector2();
+        for (int i = 0; i < 11; i++)
+        {
+            var x = (Math.Pow((1 - (0.1 * i)), 2) * shooterPos[0]) 
+                    + ((2 * (1 - (0.1 * i)) * i/10) * (Math.Abs(shooterPos[0] - enemyPos[0]) / 2))
+                    + (Math.Pow((0.1 * i), 2) * enemyPos[0]);
+            var y = (Math.Pow((1 - (0.1 * i)), 2) * shooterPos[1]) 
+                    + ((2 * (1 - (0.1 * i)) * i/10) * 1)
+                    + (Math.Pow((0.1 * i), 2) * enemyPos[1]);
+            point.x = Convert.ToSingle(x);
+            point.y = Convert.ToSingle(y);
+//            GD.Print(point);
+            _curve.AddPoint(point, new Vector2(0, 0));
+        }
+        GD.Print(_curve.GetPointCount());
+        return _curve;
+    }
+    
+    #region Signals
     private void _on_Timer_timeout()
     {
         GunTimer.Start();
-        CanShoot = true;
+        _canShoot = true;
     }
     
     private void _on_DetectRadius_body_entered(Godot.Object body)
     {
+//        var b = (KinematicBody2D) body;
+//        GD.Print(b.Name);
         if (body is KinematicBody2D player)
         {
-            if (player.Name == "TestTankPlayer")
+            if (player.Name == "Target")
             {
-                GunTimer.Start();
-                Target = player;
+                GD.Print("you hit tank");
+//                GunTimer.Start();
+//                _target = player;
             }
         }
     }
     
     private void _on_DetectRadius_body_exited(Godot.Object body)
     {
-        if (body == Target)
+        if (body == _target)
         {
-            Target = null;
+            _target = null;
         }
     }
+    #endregion
+    
 }
